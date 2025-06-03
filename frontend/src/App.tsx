@@ -1,5 +1,10 @@
+import { Routes } from "react-router";
+import usePublicRouter from "./routes/usePublicRouter";
+
 function App() {
-  return <div>Hello</div>;
+  const publicRouter = usePublicRouter();
+
+  return <Routes>{publicRouter}</Routes>;
 }
 
 export default App;
