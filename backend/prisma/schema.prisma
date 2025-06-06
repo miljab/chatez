@@ -16,7 +16,7 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid())
-  username  String   @unique @db.VarChar(16)
+  username  String   @unique @db.VarChar(32)
   password  String
   avatar    String?
   bio       String?  @db.VarChar(255)

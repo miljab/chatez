@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -5,7 +6,47 @@
 
 * {
   box-sizing: border-box;
+  /* font-family: "Roboto", sans-serif; */
+}
+
+body {
   font-family: "Roboto", sans-serif;
+}
+
+@theme {
+  --font-roboto: "Roboto", sans-serif;
+  --font-roboto-mono: "Roboto Mono", monospace;
+}
+
+@theme {
+  --animate-logo-typing:
+    typing steps(6) 1s, blink steps(1) 0.5s infinite alternate;
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+}
+
+@theme {
+  --animate-fade-in: fade ease-out 2s forwards;
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
 }
 
 @theme inline {
@@ -54,7 +95,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(62.7% 0.194 149.214);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
