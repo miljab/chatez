@@ -47,7 +47,10 @@ function LoginForm() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-      const response = await axios.post("/login", data);
+      const response = await axios.post("/login", data, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
 
       const accessToken = response?.data?.accessToken;
       const user = response?.data?.user;

@@ -127,7 +127,7 @@ router.post(
 
         res.status(200).json({
           accessToken,
-          user: { username, id: user.id },
+          user: { username, id: user.id, avatar: user.avatar },
         });
       } catch (error) {
         console.error(error);
@@ -175,7 +175,7 @@ router.get("/refresh", async (req, res) => {
 
     res.status(200).json({
       accessToken,
-      user: { username: user.username, id: user.id },
+      user: { username: user.username, id: user.id, avatar: user.avatar },
     });
   } catch (error) {
     console.error(error);
