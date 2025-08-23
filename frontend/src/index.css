@@ -19,6 +19,10 @@ body {
 }
 
 @theme {
+  --breakpoint-xs: 30rem;
+}
+
+@theme {
   --animate-logo-typing:
     typing steps(6) 1s, blink steps(1) 0.5s infinite alternate;
 

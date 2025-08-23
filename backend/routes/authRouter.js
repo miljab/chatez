@@ -127,7 +127,13 @@ router.post(
 
         res.status(200).json({
           accessToken,
-          user: { username, id: user.id, avatar: user.avatar },
+          user: {
+            username,
+            id: user.id,
+            avatar: user.avatar,
+            bio: user.bio,
+            createdAt: user.createdAt,
+          },
         });
       } catch (error) {
         console.error(error);
@@ -175,7 +181,13 @@ router.get("/refresh", async (req, res) => {
 
     res.status(200).json({
       accessToken,
-      user: { username: user.username, id: user.id, avatar: user.avatar },
+      user: {
+        username: user.username,
+        id: user.id,
+        avatar: user.avatar,
+        bio: user.bio,
+        createdAt: user.createdAt,
+      },
     });
   } catch (error) {
     console.error(error);

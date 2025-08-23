@@ -23,15 +23,15 @@ function Nav() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 flex w-full items-center justify-between bg-black p-4 text-white">
+      <nav className="fixed top-0 left-0 flex w-full items-center justify-between border p-4 shadow-sm">
         <div>
           <h1 className="font-roboto-mono overflow-hidden text-3xl whitespace-nowrap sm:text-4xl">
             Chat<span className="text-green-600">EZ</span>
           </h1>
         </div>
-        <div className="flex gap-2 sm:gap-8">
+        <div className="flex items-center gap-2 sm:gap-8">
           <div className="flex items-center justify-center gap-2">
-            <div className="shrink-0 rounded-full border border-white p-0.5">
+            <div className="shrink-0 rounded-full border p-0.5 shadow-md">
               <img
                 src={auth?.user?.avatar ? auth.user.avatar : defaultAvatar}
                 alt="avatar"

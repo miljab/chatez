@@ -3,6 +3,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/authRouter");
+const chatRouter = require("./routes/chatsRouter");
 
 app.use(
   cors({
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api", authRouter);
+app.use("/api", chatRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Express app listening on port ${PORT}!`));
