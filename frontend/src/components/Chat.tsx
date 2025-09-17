@@ -14,6 +14,7 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const textareaRef = useRef<AutosizeTextAreaRef>(null);
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -39,6 +40,12 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
     }
   }, [activeChat]);
 
+  useEffect(() => {
+    if (messagesContainerRef.current)
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+  }, [messages]);
+
   async function getMessages() {
     try {
       const response = await axiosPrivate.get(`/messages/${activeChat?.id}`);
@@ -54,7 +61,7 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
       if (msg.authorId === auth?.user?.id) {
         return (
           <div key={msg.id} className="flex justify-end p-1">
-            <div className="flex w-auto max-w-4/5 justify-end rounded-md bg-neutral-200 p-2 wrap-anywhere">
+            <div className="flex w-auto max-w-4/5 justify-end rounded-md bg-neutral-200 p-2 wrap-anywhere whitespace-pre-wrap">
               {msg.text}
             </div>
           </div>
@@ -99,13 +106,21 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
         <img className="h-8 w-8 rounded-full" src={activeChat.img} />
         <div className="truncate">{activeChat.name}</div>
       </div>
-      <div className="flex-grow overflow-y-auto p-4">{listMessages()}</div>
+      <div ref={messagesContainerRef} className="flex-grow overflow-y-auto p-4">
+        {listMessages()}
+      </div>
       <div className="flex items-center justify-center gap-2 border-t p-4">
         <AutosizeTextarea
           ref={textareaRef}
           rows={1}
           maxHeight={200}
           className="field-sizing-fixed min-h-0 resize-none"
+          onKeyDown={(e) => {
+            if (e.code === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
         ></AutosizeTextarea>
         <Button onClick={sendMessage}>Send</Button>
       </div>
