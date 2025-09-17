@@ -82,6 +82,47 @@ router.post("/chats/new", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/messages/:chatId", authenticateToken, async (req, res) => {
+  try {
+    const chatId = req.params.chatId;
+
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId,
+      },
+      include: {
+        members: true,
+      },
+    });
+
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    } else {
+      const membersId = chat.members.map((member) => member.id);
+
+      if (!membersId.includes(req.user.id))
+        return res.status(403).json({ message: "Access forbidden" });
+    }
+
+    const messages = await prisma.message.findMany({
+      where: {
+        chatId: chatId,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+      include: {
+        author: true,
+      },
+    });
+
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching messages" });
+  }
+});
+
 router.post("/user", authenticateToken, async (req, res) => {
   try {
     const username = req.body.username;

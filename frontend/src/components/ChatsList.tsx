@@ -15,7 +15,11 @@ import {
   DialogClose,
 } from "./ui/dialog";
 
-function ChatsList() {
+interface ChatListProps {
+  pickChat: (chatId: string, chatName: string, chatImg: string) => void;
+}
+
+function ChatsList({ pickChat }: ChatListProps) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [chats, setChats] = useState<Array<Chat>>([]);
@@ -31,7 +35,6 @@ function ChatsList() {
     try {
       const response = await axiosPrivate.get("/chats");
 
-      console.log(response.data);
       setChats(response.data);
     } catch (error) {
       console.log(error);
@@ -59,30 +62,25 @@ function ChatsList() {
       );
 
     return chats.map((chat) => {
+      let chatImg, chatName;
+
       if (chat.isGroup) {
-        return (
-          <div className="grid cursor-pointer grid-cols-[32px_1fr] items-center justify-start gap-2 rounded-xl bg-neutral-100 p-2 hover:bg-neutral-200">
-            <img
-              src={chat.avatar ? chat.avatar : defaultGroupAvatar}
-              alt="avatar"
-              className="h-8 w-8 rounded-full"
-            />
-            <div className="truncate">
-              {chat.name ? chat.name : formatGroupChatName(chat)}
-            </div>
-          </div>
-        );
+        chatImg = chat.avatar ? chat.avatar : defaultGroupAvatar;
+        chatName = chat.name ? chat.name : formatGroupChatName(chat);
+      } else {
+        const otherUser = getOtherChatUser(chat);
+        chatImg = otherUser.avatar ? otherUser.avatar : defaultAvatar;
+        chatName = otherUser.username;
       }
 
-      const otherUser = getOtherChatUser(chat);
-
       return (
-        <div className="grid cursor-pointer grid-cols-[32px_1fr] items-center justify-start gap-2 rounded-xl bg-neutral-100 p-2 hover:bg-neutral-200">
-          <img
-            src={otherUser.avatar ? otherUser.avatar : defaultAvatar}
-            className="h-8 w-8 rounded-full"
-          />
-          <div className="truncate">{otherUser.username}</div>
+        <div
+          key={chat.id}
+          onClick={() => pickChat(chat.id, chatName, chatImg)}
+          className="grid cursor-pointer grid-cols-[32px_1fr] items-center justify-start gap-2 rounded-xl bg-neutral-100 p-2 hover:bg-neutral-200"
+        >
+          <img src={chatImg} className="h-8 w-8 rounded-full" />
+          <div className="truncate">{chatName}</div>
         </div>
       );
     });
@@ -141,7 +139,7 @@ function ChatsList() {
   }
 
   return (
-    <div className="m-auto flex h-2/3 max-h-[600px] min-h-[400px] w-11/12 max-w-[400px] flex-col rounded-xl border shadow-sm">
+    <div className="m-4 flex h-2/3 max-h-[600px] min-h-[400px] w-11/12 max-w-[400px] flex-col rounded-xl border shadow-sm">
       <div className="flex items-center justify-center gap-2 border-b px-4 py-2">
         <input
           type="text"
