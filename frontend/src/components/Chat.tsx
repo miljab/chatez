@@ -53,14 +53,18 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
     return messages.map((msg) => {
       if (msg.authorId === auth?.user?.id) {
         return (
-          <div key={msg.id} className="items-end">
-            <div>{msg.text}</div>
+          <div key={msg.id} className="flex justify-end p-1">
+            <div className="flex w-auto max-w-4/5 justify-end rounded-md bg-neutral-200 p-2 wrap-anywhere">
+              {msg.text}
+            </div>
           </div>
         );
       } else {
         return (
-          <div key={msg.id}>
-            <div className="bg-primary text-white">{msg.text}</div>
+          <div key={msg.id} className="flex justify-start p-1">
+            <div className="bg-primary flex w-auto max-w-4/5 justify-start rounded-md p-2 text-white">
+              {msg.text}
+            </div>
           </div>
         );
       }
@@ -68,7 +72,11 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
   }
 
   async function sendMessage() {
-    if (textareaRef.current?.textArea.value && activeChat && ws.current) {
+    if (
+      textareaRef.current?.textArea.value.trim() &&
+      activeChat &&
+      ws.current
+    ) {
       const messageData = {
         authorId: auth.user?.id,
         chatId: activeChat.id,
@@ -77,6 +85,7 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
 
       ws.current.send(JSON.stringify(messageData));
       textareaRef.current.textArea.value = "";
+      textareaRef.current.triggerResize();
     }
   }
 
