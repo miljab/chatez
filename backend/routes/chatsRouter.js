@@ -113,6 +113,7 @@ router.get("/messages/:chatId", authenticateToken, async (req, res) => {
       },
       include: {
         author: true,
+        chat: true,
       },
     });
 

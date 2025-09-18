@@ -16,7 +16,12 @@ import {
 } from "./ui/dialog";
 
 interface ChatListProps {
-  pickChat: (chatId: string, chatName: string, chatImg: string) => void;
+  pickChat: (
+    chatId: string,
+    chatName: string,
+    chatImg: string,
+    isGroup: boolean,
+  ) => void;
   toggleLayout: boolean;
   setToggleLayout: React.Dispatch<React.SetStateAction<boolean>>;
   showBackButton: boolean;
@@ -84,7 +89,9 @@ function ChatsList({
       return (
         <div
           key={chat.id}
-          onClick={() => handleChatClick(chat.id, chatName, chatImg)}
+          onClick={() =>
+            handleChatClick(chat.id, chatName, chatImg, chat.isGroup)
+          }
           className="grid cursor-pointer grid-cols-[32px_1fr] items-center justify-start gap-2 rounded-xl bg-neutral-100 p-2 hover:bg-neutral-200"
         >
           <img src={chatImg} className="h-8 w-8 rounded-full" />
@@ -94,8 +101,13 @@ function ChatsList({
     });
   }
 
-  function handleChatClick(id: string, name: string, img: string) {
-    pickChat(id, name, img);
+  function handleChatClick(
+    id: string,
+    name: string,
+    img: string,
+    isGroup: boolean,
+  ) {
+    pickChat(id, name, img, isGroup);
     setToggleLayout(!toggleLayout);
   }
 

@@ -6,6 +6,7 @@ export interface ActiveChat {
   id: string;
   name: string;
   img: string;
+  isGroup: boolean;
 }
 
 function Home() {
@@ -38,11 +39,17 @@ function Home() {
     }
   }, [windowWidth]);
 
-  function pickChat(chatId: string, chatName: string, chatImg: string) {
+  function pickChat(
+    chatId: string,
+    chatName: string,
+    chatImg: string,
+    isGroup: boolean,
+  ) {
     const newActiveChat = {
       id: chatId,
       name: chatName,
       img: chatImg,
+      isGroup: isGroup,
     };
 
     setActiveChat(newActiveChat);

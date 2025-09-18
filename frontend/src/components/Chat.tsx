@@ -73,6 +73,8 @@ function Chat({
 
   function listMessages() {
     return messages.map((msg) => {
+      console.log(msg);
+
       if (msg.authorId === auth?.user?.id) {
         return (
           <div key={msg.id} className="flex justify-end p-1">
@@ -81,18 +83,38 @@ function Chat({
             </div>
           </div>
         );
+      } else if (!activeChat?.isGroup) {
+        return (
+          <div
+            key={msg.id}
+            className="flex items-start justify-start gap-1 p-1"
+          >
+            <img
+              src={msg.author.avatar || defaultAvatar}
+              className="mt-1 h-8 w-8 rounded-full"
+            />
+            <div className="bg-primary flex w-auto max-w-4/5 justify-start rounded-xl p-2 wrap-anywhere whitespace-pre-wrap text-white">
+              {msg.text}
+            </div>
+          </div>
+        );
       } else {
         return (
           <div
             key={msg.id}
-            className="flex items-center justify-start gap-1 p-1"
+            className="justify start flex items-center gap-1 p-1"
           >
-            <img
-              src={msg.author.avatar || defaultAvatar}
-              className="h-8 w-8 rounded-full"
-            />
-            <div className="bg-primary flex w-auto max-w-4/5 justify-start rounded-xl p-2 wrap-anywhere whitespace-pre-wrap text-white">
-              {msg.text}
+            <div className="grid w-auto max-w-4/5 grid-cols-[32px_1fr] gap-x-1">
+              <div className="col-start-2 m-0 mx-0.5 flex items-end p-0 font-light">
+                {msg.author.username}
+              </div>
+              <img
+                src={msg.author.avatar || defaultAvatar}
+                className="mt-1 h-8 w-8 rounded-full"
+              />
+              <div className="bg-primary flex w-fit justify-start rounded-xl p-2 wrap-anywhere whitespace-pre-wrap text-white">
+                {msg.text}
+              </div>
             </div>
           </div>
         );
