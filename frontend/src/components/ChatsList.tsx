@@ -17,9 +17,17 @@ import {
 
 interface ChatListProps {
   pickChat: (chatId: string, chatName: string, chatImg: string) => void;
+  toggleLayout: boolean;
+  setToggleLayout: React.Dispatch<React.SetStateAction<boolean>>;
+  showBackButton: boolean;
 }
 
-function ChatsList({ pickChat }: ChatListProps) {
+function ChatsList({
+  pickChat,
+  toggleLayout,
+  setToggleLayout,
+  showBackButton,
+}: ChatListProps) {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [chats, setChats] = useState<Array<Chat>>([]);
@@ -76,7 +84,7 @@ function ChatsList({ pickChat }: ChatListProps) {
       return (
         <div
           key={chat.id}
-          onClick={() => pickChat(chat.id, chatName, chatImg)}
+          onClick={() => handleChatClick(chat.id, chatName, chatImg)}
           className="grid cursor-pointer grid-cols-[32px_1fr] items-center justify-start gap-2 rounded-xl bg-neutral-100 p-2 hover:bg-neutral-200"
         >
           <img src={chatImg} className="h-8 w-8 rounded-full" />
@@ -84,6 +92,11 @@ function ChatsList({ pickChat }: ChatListProps) {
         </div>
       );
     });
+  }
+
+  function handleChatClick(id: string, name: string, img: string) {
+    pickChat(id, name, img);
+    setToggleLayout(!toggleLayout);
   }
 
   async function addUser() {
@@ -139,7 +152,9 @@ function ChatsList({ pickChat }: ChatListProps) {
   }
 
   return (
-    <div className="m-4 flex h-2/3 max-h-[600px] min-h-[400px] w-11/12 max-w-[400px] flex-col rounded-xl border shadow-sm">
+    <div
+      className={`m-4 h-2/3 max-h-[600px] min-h-[400px] w-11/12 max-w-[400px] flex-col rounded-xl border shadow-sm ${!toggleLayout || !showBackButton ? "flex" : "hidden"}`}
+    >
       <div className="flex items-center justify-center gap-2 border-b px-4 py-2">
         <input
           type="text"

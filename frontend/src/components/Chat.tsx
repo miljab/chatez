@@ -9,8 +9,22 @@ import {
   type AutosizeTextAreaRef,
 } from "./ui/AutosizeTextarea";
 import defaultAvatar from "@/assets/default-avatar.png";
+import Icon from "@mdi/react";
+import { mdiKeyboardBackspace } from "@mdi/js";
 
-function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
+interface ChatProps {
+  activeChat: ActiveChat | null;
+  showBackButton: boolean;
+  toggleLayout: boolean;
+  setToggleLayout: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function Chat({
+  activeChat,
+  showBackButton,
+  toggleLayout,
+  setToggleLayout,
+}: ChatProps) {
   const [messages, setMessages] = useState<Array<Message>>([]);
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
@@ -104,13 +118,33 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
     }
   }
 
+  function handleBackButtonClick() {
+    setToggleLayout(!toggleLayout);
+  }
+
   if (activeChat === null) {
     return;
   }
 
   return (
-    <div className="m-4 flex h-2/3 max-h-[600px] min-h-[400px] w-full flex-col rounded-xl border shadow-sm">
-      <div className="grid w-full grid-cols-[32px_1fr] items-center justify-start gap-2 border-b p-4">
+    <div
+      className={`m-4 h-2/3 max-h-[600px] min-h-[400px] w-full max-w-[800px] flex-col rounded-xl border shadow-sm ${toggleLayout || !showBackButton ? "flex" : "hidden"}`}
+    >
+      <div
+        className={`grid w-full items-center justify-start gap-2 border-b p-4 ${
+          showBackButton ? "grid-cols-[48px_32px_1fr]" : "grid-cols-[32px_1fr]"
+        }`}
+      >
+        <button
+          onClick={handleBackButtonClick}
+          className={`h-12 w-12 cursor-pointer items-center justify-center rounded-full p-1 hover:bg-neutral-200 ${showBackButton ? "flex" : "hidden"}`}
+        >
+          <Icon
+            path={mdiKeyboardBackspace}
+            size={1.5}
+            className="text-neutral-500"
+          ></Icon>
+        </button>
         <img className="h-8 w-8 rounded-full" src={activeChat.img} />
         <div className="truncate">{activeChat.name}</div>
       </div>
