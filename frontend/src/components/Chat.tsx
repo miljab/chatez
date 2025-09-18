@@ -8,6 +8,7 @@ import {
   AutosizeTextarea,
   type AutosizeTextAreaRef,
 } from "./ui/AutosizeTextarea";
+import defaultAvatar from "@/assets/default-avatar.png";
 
 function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
   const [messages, setMessages] = useState<Array<Message>>([]);
@@ -61,15 +62,22 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
       if (msg.authorId === auth?.user?.id) {
         return (
           <div key={msg.id} className="flex justify-end p-1">
-            <div className="flex w-auto max-w-4/5 justify-end rounded-md bg-neutral-200 p-2 wrap-anywhere whitespace-pre-wrap">
+            <div className="flex w-auto max-w-4/5 justify-end rounded-xl bg-neutral-200 p-2 wrap-anywhere whitespace-pre-wrap">
               {msg.text}
             </div>
           </div>
         );
       } else {
         return (
-          <div key={msg.id} className="flex justify-start p-1">
-            <div className="bg-primary flex w-auto max-w-4/5 justify-start rounded-md p-2 text-white">
+          <div
+            key={msg.id}
+            className="flex items-center justify-start gap-1 p-1"
+          >
+            <img
+              src={msg.author.avatar || defaultAvatar}
+              className="h-8 w-8 rounded-full"
+            />
+            <div className="bg-primary flex w-auto max-w-4/5 justify-start rounded-xl p-2 wrap-anywhere whitespace-pre-wrap text-white">
               {msg.text}
             </div>
           </div>
@@ -87,7 +95,7 @@ function Chat({ activeChat }: { activeChat: ActiveChat | null }) {
       const messageData = {
         authorId: auth.user?.id,
         chatId: activeChat.id,
-        text: textareaRef.current.textArea.value,
+        text: textareaRef.current.textArea.value.trim(),
       };
 
       ws.current.send(JSON.stringify(messageData));
